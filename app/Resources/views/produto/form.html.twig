@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li class="active">Produtos</li>
+    </ol>
+
+    <div class="well well-lg">
+        <h2>Cadastro de produtos</h2>
+
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.codigo) }}
+            {{ form_widget(form.codigo, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.codigo) }}</span>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nome) }}
+            {{ form_widget(form.nome, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.nome) }}</span>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.precoUnitario) }}
+            {{ form_widget(form.precoUnitario, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.precoUnitario) }}</span>
+        </div>
+        {{ form_widget(form.inserir_produto, {'label': 'Salvar', 'attr': {'class' : 'btn btn-success'}}) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
