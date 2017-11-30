@@ -34,6 +34,7 @@ class Pessoa
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message = "Informe a data de nascimento do cliente")
+     * @Assert\Date(message = "Informe uma data válida")
      */
     private $dataNascimento;
 

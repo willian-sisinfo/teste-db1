@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li class="active">Clientes</li>
+    </ol>
+
+    <div class="well well-lg">
+
+        <div class="row">
+                <h3>Clientes Cadastrados</h3>
+        </div>
+
+        <p><a href="{{ path('novo_cliente') }}" class="btn btn-success" >Novo cliente</a></p>
+
+        <div class="row">
+            <section class="col col-md-12" >
+                <table class="table table-striped table-bordered table-hover " id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Data de Nascimento</th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for cliente in clientes %}
+                        <tr>
+                            <td>{{ cliente.nome }}</td>
+                            <td>{{ cliente.dataNascimento|date('d/m/Y') }} </td>
+                            <td><a href="{{ path('editar_cliente', {'slug' : cliente.slug}) }}" type="button" class="btn btn-info fa fa-pencil"></a> </td>
+                            <td><button type="button" class="btn btn-danger fa fa-trash-o" onclick="app.showConfirmationDialog({{ cliente.id }});"></button> </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalDelete" data-rest="{{ path('excluir_cliente') }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirmar ação</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="objectId">
+                    <p>Tem certeza que deseja excluir esse registro? Essa ação não poderá ser desfeita.</p>
+                    <div class="alert" id="response-message" ></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Não excluir</button>
+                    <button type="button" class="btn btn-primary" onclick="app.doRemoveObject();">Excluir</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block pageJs %}
+
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').dataTable();
+        });
+    </script>
+{% endblock %}

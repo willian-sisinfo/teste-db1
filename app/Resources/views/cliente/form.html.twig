@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li class="active">Clientes</li>
+    </ol>
+
+    <div class="well well-lg">
+        <h2>Cadastro de clientes</h2>
+
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nome) }}
+            {{ form_widget(form.nome, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.nome) }}</span>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.dataNascimento) }}
+            {{ form_widget(form.dataNascimento, {'attr' : {'class' : 'form-control', 'id' : 'dtNascimento'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.dataNascimento) }}</span>
+        </div>
+        {{ form_widget(form.inserir_cliente, {'label': 'Salvar', 'attr': {'class' : 'btn btn-success'}}) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block pageJs %}
+    <script src="{{ asset('js/jquery.maskedinput.min.js') }}" ></script>
+    <script>
+        $(document).ready(function() {
+            $('#appbundle_pessoa_dataNascimento').mask('99/99/9999');
+        });
+    </script>
+{% endblock %}
