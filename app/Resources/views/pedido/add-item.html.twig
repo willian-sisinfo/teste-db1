@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li><a href="{{ path('pedido_index') }}">Pedidos</a> </li>
+        <li class="active">Adicionando itens ao pedido {{ numero }}</li>
+    </ol>
+
+    <div class="well well-lg">
+        <h2>Adicionando itens ao pedido {{ numero }}</h2>
+
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_widget(form.produto, {'attr' : {'class' : 'form-control', 'id' : 'produto'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.produto) }}</span>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.quantidade) }}
+            {{ form_widget(form.quantidade, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.quantidade) }}</span>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.percentualDesconto) }}
+            {{ form_widget(form.percentualDesconto, {'attr' : {'class' : 'form-control'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.percentualDesconto) }}</span>
+            <input type="hidden" name="pedido" value="{{ numero }}">
+        </div>
+        {{ form_widget(form.inserir_item, {'label': 'Adicionar Item', 'attr': {'class' : 'btn btn-success'}}) }}
+        <a href="{{ path('gerenciar_pedido', {'pedido' : numero}) }}" class="btn btn-warning" >Cancelar</a>
+        {{ form_end(form) }}
+    </div>
+
+
+{% endblock %}
+
+{% block pageJs %}
+    <script src="{{ asset('js/select2.min.js') }}" ></script>
+    <script>
+        $(document).ready(function () {
+            $('#form_item_pedido_produto').select2();
+        });
+    </script>
+{% endblock %}

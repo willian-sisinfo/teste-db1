@@ -8,12 +8,13 @@ namespace AppBundle\Entity;
  * Time: 09:28
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="pedidos")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PedidoRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Pedido
@@ -27,7 +28,6 @@ class Pedido
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $numero;
 
@@ -36,10 +36,24 @@ class Pedido
      */
     private $cliente;
 
+    /** @ORM\OneToMany(targetEntity="ItemPedido", mappedBy="pedido")
+     */
+    private $itens;
+
     /**
      * @ORM\Column(type="datetime")
      */
     private $emissao;
+
+    /**
+     * @ORM\Column(type="decimal", precision=7, scale=2, nullable=false)
+     */
+    private $total;
+
+    public function __construct()
+    {
+        $this->itens = new ArrayCollection();
+    }
 
     /**
      * @ORM\PrePersist()
@@ -112,6 +126,37 @@ class Pedido
         $this->emissao = $emissao;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getItens()
+    {
+        return $this->itens;
+    }
+
+    /**
+     * @param mixed $itens
+     */
+    public function setItens($itens)
+    {
+        $this->itens = $itens;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param mixed $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    }
 
 
 }

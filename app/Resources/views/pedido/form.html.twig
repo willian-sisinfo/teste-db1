@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li class="active">Pedidos</li>
+    </ol>
+
+    <div class="well well-lg">
+        <h2>Novo pedido</h2>
+
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.cliente) }}
+            {{ form_widget(form.cliente, {'attr' : {'class' : 'form-control', 'id' : 'cliente'}} ) }}
+            <span class="alert-danger">{{ form_errors(form.cliente) }}</span>
+        </div>
+        {{ form_widget(form.criar_pedido, {'label': 'Próximo', 'attr': {'class' : 'btn btn-success'}}) }}
+        {{ form_end(form) }}
+    </div>
+
+
+{% endblock %}
+
+{% block pageJs %}
+    <script src="{{ asset('js/select2.min.js') }}" ></script>
+    <script>
+        $(document).ready(function () {
+            $('#appbundle_pedido_cliente').select2();
+        });
+    </script>
+{% endblock %}

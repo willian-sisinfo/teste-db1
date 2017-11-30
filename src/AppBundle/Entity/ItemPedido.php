@@ -28,7 +28,7 @@ class ItemPedido
     /** @ORM\ManyToOne(targetEntity="Produto") */
     private $produto;
 
-    /** @ORM\ManyToOne(targetEntity="Pedido")
+    /** @ORM\ManyToOne(targetEntity="Pedido", inversedBy="itens")
      * @ORM\JoinColumn(name="pedido_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $pedido;
