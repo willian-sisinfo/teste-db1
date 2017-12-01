@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity\Transients;
+namespace AppBundle\Transients;
 
 class ActionError {
 

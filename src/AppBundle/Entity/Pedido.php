@@ -31,6 +31,11 @@ class Pedido
      */
     private $numero;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $status;
+
     /** @ORM\ManyToOne(targetEntity="Pessoa")
      * @Assert\NotNull(message = "Selecione o cliente")
      */
@@ -53,6 +58,7 @@ class Pedido
     public function __construct()
     {
         $this->itens = new ArrayCollection();
+        $this->status = 0;
     }
 
     /**
@@ -156,6 +162,22 @@ class Pedido
     public function setTotal($total)
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

@@ -7,6 +7,10 @@ var app = {
         if(objectId != null && typeof objectId != 'undefined') {
             $('#objectId').val(objectId);
             $('#modalDelete').modal('show');
+
+            $('#response-message').removeClass('alert-danger');
+            $('#response-message').removeClass('alert-success');
+            $('#response-message').hide();
         }
     },
     doRemoveObject: function () {
@@ -27,18 +31,21 @@ var app = {
                     if(data.status == 'OK') {
                         $('#response-message').addClass('alert-success');
                         $('#response-message').html(data.message);
+                        $('#response-message').show();
                         setTimeout(function(){
                             location.reload();
                         }, 1000);
                     } else {
                         $('#response-message').addClass('alert-danger');
                         $('#response-message').html(data.erros[0].message);
+                        $('#response-message').show();
                     }
                 },
                 error: function(data) {
                     $.LoadingOverlay('hide');
                     $('#response-message').addClass('alert-danger');
                     $('#response-message').html(data.responseText);
+                    $('#response-message').show();
                 }
             });
         }

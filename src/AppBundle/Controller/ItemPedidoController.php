@@ -21,11 +21,18 @@ class ItemPedidoController extends Controller
     {
         if(isset($pedido)) {
             $pu = new PersistenceUnity('AppBundle:Pedido', $this);
-            $itensPedido = $pu->findBy(array('numero' => $pedido));
+            $pedidoObject = $pu->findBy(array('numero' => $pedido));
+
+            if($pedidoObject->getStatus() != 0) {
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('warn', 'Pedido ' .$pedido. ' já está fechado, impossível adicionar itens!');
+
+                return new RedirectResponse($this->generateUrl('pedido_index'));
+            }
 
             return $this->render('pedido/carrinho.html.twig', array(
-                'itens' => $itensPedido->getItens(),
-                'numero' => $pedido
+                'pedido' => $pedidoObject
             ));
         }
 
@@ -42,13 +49,27 @@ class ItemPedidoController extends Controller
      */
     public function novoClienteAction($pedido, Request $request)
     {
-        $item = new ItemPedido();
-        $form = $this->createCreateForm($item);
+        if(isset($pedido)) {
+            $puPedido = new PersistenceUnity('AppBundle:Pedido', $this);
+            $pedidoObject = $puPedido->findBy(array('numero' => $pedido));
 
-        return $this->render('pedido/add-item.html.twig', array(
-            'form' => $form->createView(),
-            'numero' => $pedido
-        ));
+            if($pedidoObject->getStatus() != 0) {
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('error', 'Pedido ' .$pedido. ' já está fechado, impossível adicionar itens!');
+
+                return new RedirectResponse($this->generateUrl('pedido_index'));
+            }
+
+            $item = new ItemPedido();
+            $form = $this->createCreateForm($item);
+
+            return $this->render('pedido/add-item.html.twig', array(
+                'form' => $form->createView(),
+                'numero' => $pedido
+            ));
+        }
+        return new RedirectResponse($this->generateUrl('pedido_index'));
     }
 
     /**
@@ -97,21 +118,27 @@ class ItemPedidoController extends Controller
     }
 
     /**
-     * @Route("/cliente/excluir", name="excluir_cliente")
+     * @Route("/pedido/excluir-item", name="excluir_item_pedido")
      * @Method({"POST", "GET"})
      */
-    public function excluirClienteAction(Request $request) {
+    public function excluirItemPedidoAction(Request $request) {
         if($request->isMethod('GET')) {
-            return new RedirectResponse($this->generateUrl('cliente_index'));
+            return new RedirectResponse($this->generateUrl('pedido_index'));
         }
         $id = $request->get('objectId');
         if(isset($id)) {
-            $pu = new PersistenceUnity('AppBundle:Pessoa', $this);
-            $cliente = $pu->findModelById($id);
-            if($cliente != null) {
-                return $pu->deleteModel($cliente);
+            $pu = new PersistenceUnity('AppBundle:ItemPedido', $this);
+            $item = $pu->findModelById($id);
+            if($item != null) {
+                $pedido = $item->getPedido();
+                $pedido->setTotal($pedido->getTotal() - $item->getTotal());
+
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+
+                return $pu->deleteModel($item);
             }
-            throw $this->createNotFoundException('Pessoa não encontrado');
+            throw $this->createNotFoundException('Item não encontrado');
         }
         return new RedirectResponse($this->generateUrl('cliente_index'));
 

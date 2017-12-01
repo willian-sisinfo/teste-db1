@@ -93,6 +93,33 @@ class PedidoController extends Controller
 
     }
 
+
+    /**
+     * @Route("/pedido/fechar/{pedido}", name="fechar_pedido")
+     * @Method({"POST", "GET"})
+     */
+    public function fecharPedidoAction($pedido, Request $request) {
+
+        if(isset($pedido)) {
+            $em = $this->getDoctrine()->getManager();
+            $pedidoObject =  $em->getRepository('AppBundle:Pedido')->find($pedido);
+            if($pedidoObject != null) {
+                $pedidoObject->setStatus(1);
+                $em->flush();
+
+                $request->getSession()
+                    ->getFlashBag()
+                    ->add('success', 'Pedido fechado com sucesso!');
+
+                return new RedirectResponse($this->generateUrl('pedido_index'));
+
+            }
+            throw $this->createNotFoundException('Pedido não encontrado');
+        }
+        return new RedirectResponse($this->generateUrl('pedido_index'));
+
+    }
+
     private function createCreateForm(Pedido $entity) {
         return $this->createForm(new PedidoType(), $entity, array(
             'action' => $this->generateUrl('criar_pedido'),

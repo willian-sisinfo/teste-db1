@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Helpers\PersistenceUnity;
+use AppBundle\Transients\ActionError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Pessoa;
@@ -129,6 +131,13 @@ class PessoaController extends Controller
             $pu = new PersistenceUnity('AppBundle:Pessoa', $this);
             $cliente = $pu->findModelById($id);
             if($cliente != null) {
+
+                $puItem = new PersistenceUnity('AppBundle:Pedido', $this);
+                $item = $puItem->findBy(array('cliente' => $cliente));
+                if($item != null) {
+                    return new JsonResponse(new ActionError('Não é possível excluir esse cliente pois ele pertence a um pedido'));
+                }
+
                 return $pu->deleteModel($cliente);
             }
             throw $this->createNotFoundException('Pessoa não encontrado');

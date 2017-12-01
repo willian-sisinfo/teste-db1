@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Transients\ActionError;
 use AppBundle\Helpers\PersistenceUnity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Produto;
@@ -128,7 +130,14 @@ class ProdutoController extends Controller
         if(isset($id)) {
             $pu = new PersistenceUnity('AppBundle:Produto', $this);
             $produto = $pu->findModelById($id);
+
             if($produto != null) {
+                $puItem = new PersistenceUnity('AppBundle:ItemPedido', $this);
+                $item = $puItem->findBy(array('produto' => $produto));
+                if($item != null) {
+                    return new JsonResponse(new ActionError('Não é possível excluir esse produto pois ele pertence a um pedido'));
+                }
+
                 return $pu->deleteModel($produto);
             }
             throw $this->createNotFoundException('Produto não encontrado');

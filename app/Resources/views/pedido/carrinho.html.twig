@@ -3,16 +3,16 @@
     <ol class="breadcrumb">
         <li><a href="{{ path('index') }}">Home</a></li>
         <li><a href="{{ path('pedido_index') }}">Pedidos</a> </li>
-        <li class="active">Gerenciando Pedido {{ numero }}</li>
+        <li class="active">Gerenciando Pedido {{ pedido.numero }}</li>
     </ol>
 
     <div class="well well-lg">
 
         <div class="row">
-            <h3>Gerenciando pedido {{ numero }}</h3>
+            <h3>Gerenciando pedido {{ pedido.numero }}</h3>
         </div>
 
-        <p><a href="{{ path('form_add_item_pedido', {'pedido' : numero}) }}" class="btn btn-success" >Adicionar Item</a></p>
+        <p><a href="{{ path('form_add_item_pedido', {'pedido' : pedido.numero}) }}" class="btn btn-success" >Adicionar Item</a></p>
 
         <div class="row">
             <section class="col col-md-12" >
@@ -28,7 +28,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for item in itens %}
+                    {% for item in pedido.itens %}
                         <tr>
                             <td>{{ item.produto.nome }}</td>
                             <td>{{ item.precoUnitario|number_format(2, ',', '.') }}</td>
@@ -40,12 +40,18 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="row" >
+                    <h3 class="pull-right">Total do pedido R$ {{ pedido.total|number_format(2, ',', '.') }} </h3>
+                </div>
+                <div class="row">
+                    <a href="{{ path('fechar_pedido', {'pedido' : pedido.id }) }}" class="pull-right btn btn-info">Fechar Pedido </a>
+                </div>
             </section>
         </div>
     </div>
 
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalDelete" data-rest="{{ path('excluir_pedido') }}">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalDelete" data-rest="{{ path('excluir_item_pedido') }}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
