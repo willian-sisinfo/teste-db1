@@ -1,5 +1,26 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li class="active">Home</a></li>
+    </ol>
 
-{% block index %}
+    <div class="well well-lg">
+        <h2>Sistema Simples de Pedidos</h2>
+
+        <div class="row">
+            <div class="col col-md-6">
+                <h3>Cadastros</h3>
+                <p><a href="{{ path('produto_index') }}">Produtos</a> </p>
+                <p><a href="{{ path('cliente_index') }}">Clientes</a> </p>
+            </div>
+
+            <div class="col col-md-6">
+                <h3>Pedidos</h3>
+                <p><a href="{{ path('pedido_index') }}">Pedidos</a> </p>
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}
