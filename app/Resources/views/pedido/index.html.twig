@@ -20,9 +20,9 @@
                         <tr>
                             <th>Número</th>
                             <th>Cliente</th>
-                            <th>Quantidade de itens</th>
                             <th>Total</th>
                             <th>Emitido em</th>
+                            <th>Ver</th>
                             <th>Excluir</th>
                         </tr>
                     </thead>
@@ -31,9 +31,9 @@
                         <tr>
                             <td>{{ pedido.numero }}</td>
                             <td>{{ pedido.cliente.nome }}</td>
-                            <td>{{ pedido.itens|length }} </td>
                             <td>R$ {{ pedido.total|number_format(2, ',', '.') }} </td>
                             <td> {{ pedido.emissao|date('d/m/Y') }} </td>
+                            <td><a href="{{ path('visualizar_pedido', {'pedido' : pedido.numero}) }}" class="btn btn-info fa fa-eye" ></a> </td>
                             <td><button type="button" class="btn btn-danger fa fa-trash-o" onclick="app.showConfirmationDialog({{ pedido.id }});"></button> </td>
                         </tr>
                     {% endfor %}

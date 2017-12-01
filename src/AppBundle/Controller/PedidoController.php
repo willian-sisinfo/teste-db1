@@ -95,6 +95,21 @@ class PedidoController extends Controller
 
 
     /**
+     * @Route("/pedido/visualizar/{pedido}", name="visualizar_pedido")
+     * @Method({"POST", "GET"})
+     */
+    public function visualizarPedidoAction($pedido, Request $request) {
+        if(isset($pedido)) {
+            $pu = new PersistenceUnity('AppBundle:Pedido', $this);
+            $pedidoObject = $pu->findBy(array('numero' => $pedido));
+            return $this->render('pedido/visualizar-pedido.html.twig', array(
+                'pedido' => $pedidoObject
+            ));
+        }
+    }
+
+
+    /**
      * @Route("/pedido/fechar/{pedido}", name="fechar_pedido")
      * @Method({"POST", "GET"})
      */

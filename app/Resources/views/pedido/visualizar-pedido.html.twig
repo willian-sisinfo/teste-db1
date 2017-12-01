@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li><a href="{{ path('index') }}">Home</a></li>
+        <li><a href="{{ path('pedido_index') }}">Pedidos</a> </li>
+        <li class="active">Detalhes do pedido {{ pedido.numero }}</li>
+    </ol>
+
+    <div class="well well-lg">
+        <h2>Detalhes do pedido {{ pedido.numero }}</h2>
+
+        <div class="row">
+            <h4>Cliente:</h4>
+            <p>{{ pedido.cliente.nome }}</p>
+            <h4>Data de emissão:</h4>
+            <p>{{ pedido.emissao|date('d/m/Y') }}</p>
+            <h4>Total:</h4>
+            <p>R$ {{ pedido.total|number_format(2, '.', ',') }}</p>
+        </div>
+
+        <div class="row">
+            <h4>Relação de Itens:</h4>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped table-bordered table-hover " id="dataTable">
+                <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor Unitário</th>
+                    <th>Quantidade</th>
+                    <th>Desconto</th>
+                    <th>Subtotal</th>
+                    <th>Remover</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in pedido.itens %}
+                    <tr>
+                        <td>{{ item.produto.nome }}</td>
+                        <td>{{ item.precoUnitario|number_format(2, ',', '.') }}</td>
+                        <td>{{ item.quantidade }} </td>
+                        <td>{{ item.percentualDesconto }} %</td>
+                        <td>{{ item.total|number_format(2, ',', '.') }}</td>
+                        <td><button type="button" class="btn btn-danger fa fa-trash-o" onclick="app.showConfirmationDialog({{ item.id }});"></button> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <a href="{{ path('pedido_index') }}" class="btn btn-default" >Fechar</a>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block pageJs %}
+    <script src="{{ asset('js/select2.min.js') }}" ></script>
+    <script>
+        $(document).ready(function () {
+            $('#form_item_pedido_produto').select2();
+        });
+    </script>
+{% endblock %}
