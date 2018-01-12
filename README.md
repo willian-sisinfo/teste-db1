@@ -1,9 +1,8 @@
 Sistema Simples de Pedidos
 ======
 
-# Teste DB1
 
-Projeto teste para processo seletivo DB-1 MGA
+Projeto Exemplo Symfony
   - CRUD de produtos
   - CRUD de clientes
   - Criação de pedidos e adição de itens no carrinho
